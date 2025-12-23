@@ -1,0 +1,1742 @@
+<!DOCTYPE html>
+
+<html lang="ar" dir="rtl">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>نظام خبير لحماية شبكات الجامعة</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+
+        :root {
+
+            --primary-color: #20B2AA;
+
+            --secondary-color: #27ae60;
+
+            --danger-color: #e74c3c;
+
+            --warning-color: #f39c12;
+
+            --light-color: #ecf0f1;
+
+            --dark-color: #2c3e50;
+
+            --text-color: #333;
+
+            --text-light: #7f8c8d;
+
+        }
+
+        * {
+
+            margin: 0;
+
+            padding: 0;
+
+            box-sizing: border-box;
+
+        }
+
+        body {
+
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+            background: linear-gradient(135deg, var(--light-color) 0%, #e4f1fe 100%);
+
+            color: var(--text-color);
+
+            direction: rtl;
+
+            min-height: 100vh;
+
+            position: relative;
+
+        }
+
+        .page {
+
+            display: none;
+
+            padding: 20px;
+
+            min-height: calc(100vh - 80px);
+
+            animation: fadeIn 0.5s ease-in-out;
+
+        }
+
+        .page.active {
+
+            display: block;
+
+        }
+
+        @keyframes fadeIn {
+
+            from { opacity: 0; transform: translateY(20px); }
+
+            to { opacity: 1; transform: translateY(0); }
+
+        }
+
+        .header {
+
+            text-align: center;
+
+            padding: 50px 20px 30px;
+
+        }
+
+        .logo {
+
+            width: 120px;
+
+            height: 120px;
+
+            margin: 0 auto 20px;
+
+            background: var(--primary-color);
+
+            border-radius: 20px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+
+            color: white;
+
+            font-size: 40px;
+
+        }
+
+        h1 {
+
+            color: var(--dark-color);
+
+            font-size: 2.5em;
+
+            margin-bottom: 15px;
+
+            font-weight: 700;
+
+        }
+
+        p {
+
+            color: var(--text-light);
+
+            font-size: 1.1em;
+
+            max-width: 700px;
+
+            margin: 0 auto 30px;
+
+            line-height: 1.6;
+
+        }
+
+        .btn {
+
+            display: inline-block;
+
+            background: var(--primary-color);
+
+            color: white;
+
+            padding: 12px 30px;
+
+            text-decoration: none;
+
+            border-radius: 30px;
+
+            font-size: 1.1em;
+
+            font-weight: 600;
+
+            transition: all 0.3s ease;
+
+            border: none;
+
+            cursor: pointer;
+
+            margin: 10px 5px;
+
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+        }
+
+        .btn:hover {
+
+            background: #1a9b9b;
+
+            transform: translateY(-2px);
+
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+
+        }
+
+        .symptoms-form {
+
+            max-width: 800px;
+
+            margin: 30px auto;
+
+            padding: 30px;
+
+            background: white;
+
+            border-radius: 15px;
+
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+
+        }
+
+        .form-group {
+
+            margin-bottom: 25px;
+
+        }
+
+        .form-group label {
+
+            display: block;
+
+            margin-bottom: 10px;
+
+            font-weight: 600;
+
+            color: var(--dark-color);
+
+            font-size: 1.1em;
+
+        }
+
+        .form-group select {
+
+            width: 100%;
+
+            padding: 12px;
+
+            border: 1px solid #ddd;
+
+            border-radius: 8px;
+
+            font-size: 1em;
+
+            transition: border 0.3s;
+
+        }
+
+        .checkbox-group {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+
+            gap: 15px;
+
+        }
+
+        .checkbox-item {
+
+            background: #f9f9f9;
+
+            border: 1px solid #eee;
+
+            border-radius: 8px;
+
+            padding: 12px;
+
+            cursor: pointer;
+
+            transition: all 0.3s;
+
+        }
+
+        .checkbox-item:hover {
+
+            background: #f0f0f0;
+
+            border-color: var(--primary-color);
+
+        }
+
+        .checkbox-item input[type="checkbox"] {
+
+            margin-right: 10px;
+
+        }
+
+        .checkbox-item label {
+
+            cursor: pointer;
+
+            font-weight: 500;
+
+        }
+
+        .results {
+
+            max-width: 900px;
+
+            margin: 30px auto;
+
+            padding: 0 20px;
+
+        }
+
+        .result-cards {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+
+            gap: 20px;
+
+            margin-bottom: 30px;
+
+        }
+
+        .result-card {
+
+            background: white;
+
+            border-radius: 12px;
+
+            padding: 25px;
+
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+
+            border-left: 6px solid;
+
+            transition: transform 0.3s, box-shadow 0.3s;
+
+        }
+
+        .result-card:hover {
+
+            transform: translateY(-5px);
+
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+
+        }
+
+        .result-card.high-risk {
+
+            border-left-color: var(--danger-color);
+
+        }
+
+        .result-card.medium-risk {
+
+            border-left-color: var(--warning-color);
+
+        }
+
+        .result-card.low-risk {
+
+            border-left-color: var(--secondary-color);
+
+        }
+
+        .result-card h3 {
+
+            color: var(--dark-color);
+
+            margin-bottom: 12px;
+
+            font-size: 1.4em;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+        }
+
+        .result-card p {
+
+            color: var(--text-light);
+
+            margin-bottom: 15px;
+
+            line-height: 1.6;
+
+        }
+
+        .severity {
+
+            font-weight: 600;
+
+            padding: 5px 12px;
+
+            border-radius: 20px;
+
+            font-size: 0.85em;
+
+            display: inline-block;
+
+        }
+
+        .high-risk .severity {
+
+            background: var(--danger-color);
+
+            color: white;
+
+        }
+
+        .medium-risk .severity {
+
+            background: var(--warning-color);
+
+            color: white;
+
+        }
+
+        .low-risk .severity {
+
+            background: var(--secondary-color);
+
+            color: white;
+
+        }
+
+        .navbar {
+
+            position: fixed;
+
+            bottom: 0;
+
+            left: 0;
+
+            right: 0;
+
+            background: white;
+
+            padding: 15px 20px;
+
+            box-shadow: 0 -2px 15px rgba(0, 0, 0, 0.08);
+
+            display: flex;
+
+            justify-content: center;
+
+            z-index: 1000;
+
+            border-top: 1px solid #eee;
+
+        }
+
+        .navbar-btn {
+
+            background: none;
+
+            border: none;
+
+            color: var(--text-color);
+
+            font-size: 0.9em;
+
+            font-weight: 500;
+
+            cursor: pointer;
+
+            padding: 8px 15px;
+
+            margin: 0 10px;
+
+            border-radius: 5px;
+
+            transition: all 0.3s;
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: center;
+
+        }
+
+        .navbar-btn:hover {
+
+            color: var(--primary-color);
+
+        }
+
+        .navbar-btn i {
+
+            font-size: 1.3em;
+
+            margin-bottom: 5px;
+
+        }
+
+        .navbar-btn.active {
+
+            color: var(--primary-color);
+
+            background: rgba(32, 178, 170, 0.1);
+
+        }
+
+        .diagnosing {
+
+            animation: pulse 1.5s infinite;
+
+        }
+
+        @keyframes pulse {
+
+            0% { transform: scale(1); }
+
+            50% { transform: scale(1.05); }
+
+            100% { transform: scale(1); }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <!-- الصفحة الرئيسية -->
+
+    <div id="home-page" class="page active">
+
+        <div class="header">
+
+            <div class="logo">
+
+                <i class="fas fa-shield-alt"></i>
+
+            </div>
+
+            <h1>نظام خبير لحماية شبكات الجامعة</h1>
+
+            <p>نظام ذكي لتشخيص الهجمات الأمنية على شبكات الجامعة بناءً على الأعراض المرصودة. يوفر النظام تشخيصًا فوريًا مع تفسيرات مفصلة ومستويات خطورة لكل هجوم.</p>
+
+            <button class="btn" onclick="showPage('symptoms-page')">
+
+                <i class="fas fa-stethoscope"></i> ابدأ التشخيص الآن
+
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- صفحة الأعراض -->
+
+    <div id="symptoms-page" class="page">
+
+        <div class="header">
+
+            <h1>تشخيص الهجمات الأمنية</h1>
+
+            <p>اختر نوع الشبكة والأعراض التي لاحظتها لبدء التشخيص.</p>
+
+        </div>
+
+        <div class="symptoms-form">
+
+            <form id="symptomsForm">
+
+                <div class="form-group">
+
+                    <label for="networkType">نوع الشبكة:</label>
+
+                    <select id="networkType" required>
+
+                        <option value="">-- اختر نوع الشبكة --</option>
+
+                        <option value="net_admin">شبكة الإدارة</option>
+
+                        <option value="net_students">شبكة الطلاب</option>
+
+                        <option value="net_wifi">شبكة الواي فاي</option>
+
+                        <option value="net_security">شبكة الأمن</option>
+
+                        <option value="net_cloud">شبكة السحابة</option>
+
+                        <option value="net_labs">شبكة المختبرات</option>
+
+                    </select>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>الأعراض:</label>
+
+                    <div class="checkbox-group">
+
+                        <!-- الأعراض العامة -->
+
+                        <div class="checkbox-item">
+
+                            <input type="checkbox" name="symptom" value="slow_network" id="slow_network">
+
+                            <label for="slow_network">
+
+                                <i class="fas fa-tachometer-alt"></i> بطء الشبكة
+
+                            </label>
+
+                        </div>
+
+                        <div class="checkbox-item">
+
+                            <input type="checkbox" name="symptom" value="high_latency" id="high_latency">
+
+                            <label for="high_latency">
+
+                                <i class="fas fa-hourglass-half"></i> تأخير عالي
+
+                            </label>
+
+                        </div>
+
+                        <div class="checkbox-item">
+
+                            <input type="checkbox" name="symptom" value="packet_loss" id="packet_loss">
+
+                            <label for="packet_loss">
+
+                                <i class="fas fa-exchange-alt"></i> فقدان حزم البيانات
+
+                            </label>
+
+                        </div>
+
+                        <div class="checkbox-item">
+
+                            <input type="checkbox" name="symptom" value="bandwidth_exhaustion" id="bandwidth_exhaustion">
+
+                            <label for="bandwidth_exhaustion">
+
+                                <i class="fas fa-wifi-slash"></i> استهلاك كامل لعرض النطاق
+
+                            </label>
+
+                        </div>
+
+                        <!-- أعراض هجمات الوصول -->
+
+                        <div class="checkbox-item">
+
+                            <input type="checkbox" name="symptom" value="repeated_login_failures" id="repeated_login_failures">
+
+                            <label for="repeated_login_failures">
+
+                                <i class="fas fa-sign-in-alt"></i> فشل متكرر في تسجيل الدخول
+
+                            </label>
+
+                        </div>
+
+                        <div class="checkbox-item">
+
+                            <input type="checkbox" name="symptom" value="weak_passwords" id="weak_passwords">
+
+                            <label for="weak_passwords">
+
+                                <i class="fas fa-lock-open"></i> كلمات مرور ضعيفة
+
+                            </label>
+
+                        </div>
+
+                        <div class="checkbox-item">
+
+                            <input type="checkbox" name="symptom" value="brute_force_logs" id="brute_force_logs">
+
+                            <label for="brute_force_logs">
+
+                                <i class="fas fa-hammer"></i> سجلات هجوم القوة الغاشمة
+
+                            </label>
+
+                        </div>
+
+                        <div class="checkbox-item">
+
+                            <input type="checkbox" name="symptom" value="unauthorized_access" id="unauthorized_access">
+
+                            <label for="unauthorized_access">
+
+                                <i class="fas fa-user-lock"></i> وصول غير مصرح به
+
+                            </label>
+
+                        </div>
+
+                        <!-- أعراض هجمات التصيد والفدية -->
+
+                        <div class="checkbox-item">
+
+                            <input type="checkbox" name="symptom" value="phishing_emails" id="phishing_emails">
+
+                            <label for="phishing_emails">
+
+                                <i class="fas fa-envelope-open-text"></i> رسائل تصيد احتيالي
+
+                            </label>
+
+                        </div>
+
+                        <div class="checkbox-item">
+
+                            <input type="checkbox" name="symptom" value="credential_leak" id="credential_leak">
+
+                            <label for="credential_leak">
+
+                                <i class="fas fa-key"></i> تسريب بيانات الاعتماد
+
+                            </label>
+
+                        </div>
+
+                        <div class="checkbox-item">
+
+                            <input type="checkbox" name="symptom" value="email_spoofing" id="email_spoofing">
+
+                            <label for="email_spoofing">
+
+                                <i class="fas fa-mail-bulk"></i> انتحال البريد الإلكتروني
+
+                            </label>
+
+                        </div>
+
+                        <div class="checkbox-item">
+
+                            <input type="checkbox" name="symptom" value="ransomware_message" id="ransomware_message">
+
+                            <label for="ransomware_message">
+
+                                <i class="fas fa-file-contract"></i> رسائل فدية
+
+                            </label>
+
+                        </div>
+
+                        <div class="checkbox-item">
+
+                            <input type="checkbox" name="symptom" value="encrypted_files" id="encrypted_files">
+
+                            <label for="encrypted_files">
+
+                                <i class="fas fa-file-archive"></i> ملفات مشفرة
+
+                            </label>
+
+                        </div>
+
+                        <div class="checkbox-item">
+
+                            <input type="checkbox" name="symptom" value="service_shutdown" id="service_shutdown">
+
+                            <label for="service_shutdown">
+
+                                <i class="fas fa-power-off"></i> إيقاف الخدمات
+
+                            </label>
+
+                        </div>
+
+                        <!-- أعراض هجمات البرمجيات الخبيثة -->
+
+                        <div class="checkbox-item">
+
+                            <input type="checkbox" name="symptom" value="malware_alert" id="malware_alert">
+
+                            <label for="malware_alert">
+
+                                <i class="fas fa-virus"></i> تنبيه فيروسات
+
+                            </label>
+
+                        </div>
+
+                        <div class="checkbox-item">
+
+                            <input type="checkbox" name="symptom" value="abnormal_cpu_usage" id="abnormal_cpu_usage">
+
+                            <label for="abnormal_cpu_usage">
+
+                                <i class="fas fa-microchip"></i> استهلاك عالي للمعالج
+
+                            </label>
+
+                        </div>
+
+                        <div class="checkbox-item">
+
+                            <input type="checkbox" name="symptom" value="abnormal_memory_usage" id="abnormal_memory_usage">
+
+                            <label for="abnormal_memory_usage">
+
+                                <i class="fas fa-memory"></i> استهلاك عالي للذاكرة
+
+                            </label>
+
+                        </div>
+
+                        <div class="checkbox-item">
+
+                            <input type="checkbox" name="symptom" value="antivirus_disabled" id="antivirus_disabled">
+
+                            <label for="antivirus_disabled">
+
+                                <i class="fas fa-shield-virus"></i> تعطيل مضاد الفيروسات
+
+                            </label>
+
+                        </div>
+
+                        <!-- أعراض هجمات الشبكة -->
+
+                        <div class="checkbox-item">
+
+                            <input type="checkbox" name="symptom" value="ddos_traffic" id="ddos_traffic">
+
+                            <label for="ddos_traffic">
+
+                                <i class="fas fa-traffic-light"></i> حركة مرور DDoS
+
+                            </label>
+
+                        </div>
+
+                        <div class="checkbox-item">
+
+                            <input type="checkbox" name="symptom" value="suspicious_ip" id="suspicious_ip">
+
+                            <label for="suspicious_ip">
+
+                                <i class="fas fa-network-wired"></i> عنوان IP مشبوه
+
+                            </label>
+
+                        </div>
+
+                        <div class="checkbox-item">
+
+                            <input type="checkbox" name="symptom" value="port_scanning_detected" id="port_scanning_detected">
+
+                            <label for="port_scanning_detected">
+
+                                <i class="fas fa-search"></i> اكتشاف فحص المنافذ
+
+                            </label>
+
+                        </div>
+
+                        <div class="checkbox-item">
+
+                            <input type="checkbox" name="symptom" value="unusual_ports_open" id="unusual_ports_open">
+
+                            <label for="unusual_ports_open">
+
+                                <i class="fas fa-door-open"></i> منافذ غير عادية مفتوحة
+
+                            </label>
+
+                        </div>
+
+                        <div class="checkbox-item">
+
+                            <input type="checkbox" name="symptom" value="dns_poisoning" id="dns_poisoning">
+
+                            <label for="dns_poisoning">
+
+                                <i class="fas fa-globe"></i> تسميم DNS
+
+                            </label>
+
+                        </div>
+
+                        <div class="checkbox-item">
+
+                            <input type="checkbox" name="symptom" value="man_in_the_middle" id="man_in_the_middle">
+
+                            <label for="man_in_the_middle">
+
+                                <i class="fas fa-user-secret"></i> هجوم الرجل في الوسط
+
+                            </label>
+
+                        </div>
+
+                        <div class="checkbox-item">
+
+                            <input type="checkbox" name="symptom" value="arp_spoofing" id="arp_spoofing">
+
+                            <label for="arp_spoofing">
+
+                                <i class="fas fa-exchange-alt"></i> انتحال ARP
+
+                            </label>
+
+                        </div>
+
+                        <!-- أعراض هجمات قاعدة البيانات -->
+
+                        <div class="checkbox-item">
+
+                            <input type="checkbox" name="symptom" value="sql_injection_attempt" id="sql_injection_attempt">
+
+                            <label for="sql_injection_attempt">
+
+                                <i class="fas fa-database"></i> محاولة حقن SQL
+
+                            </label>
+
+                        </div>
+
+                        <div class="checkbox-item">
+
+                            <input type="checkbox" name="symptom" value="xss_attack" id="xss_attack">
+
+                            <label for="xss_attack">
+
+                                <i class="fas fa-code"></i> هجوم XSS
+
+                            </label>
+
+                        </div>
+
+                        <div class="checkbox-item">
+
+                            <input type="checkbox" name="symptom" value="web_defacement" id="web_defacement">
+
+                            <label for="web_defacement">
+
+                                <i class="fas fa-paint-brush"></i> تشويه الموقع
+
+                            </label>
+
+                        </div>
+
+                        <!-- أعراض هجمات السحابة -->
+
+                        <div class="checkbox-item">
+
+                            <input type="checkbox" name="symptom" value="data_exfiltration" id="data_exfiltration">
+
+                            <label for="data_exfiltration">
+
+                                <i class="fas fa-file-export"></i> تسريب البيانات
+
+                            </label>
+
+                        </div>
+
+                        <div class="checkbox-item">
+
+                            <input type="checkbox" name="symptom" value="cloud_misconfiguration" id="cloud_misconfiguration">
+
+                            <label for="cloud_misconfiguration">
+
+                                <i class="fas fa-cog"></i> تكوين خاطئ للسحابة
+
+                            </label>
+
+                        </div>
+
+                        <!-- أعراض هجمات السجلات -->
+
+                        <div class="checkbox-item">
+
+                            <input type="checkbox" name="symptom" value="missing_logs" id="missing_logs">
+
+                            <label for="missing_logs">
+
+                                <i class="fas fa-file-alt"></i> سجلات مفقودة
+
+                            </label>
+
+                        </div>
+
+                        <div class="checkbox-item">
+
+                            <input type="checkbox" name="symptom" value="modified_logs" id="modified_logs">
+
+                            <label for="modified_logs">
+
+                                <i class="fas fa-edit"></i> سجلات معدلة
+
+                            </label>
+
+                        </div>
+
+                        <!-- أعراض هجمات VPN -->
+
+                        <div class="checkbox-item">
+
+                            <input type="checkbox" name="symptom" value="vpn_failure" id="vpn_failure">
+
+                            <label for="vpn_failure">
+
+                                <i class="fas fa-vpn"></i> فشل VPN
+
+                            </label>
+
+                        </div>
+
+                        <div class="checkbox-item">
+
+                            <input type="checkbox" name="symptom" value="rogue_access_point" id="rogue_access_point">
+
+                            <label for="rogue_access_point">
+
+                                <i class="fas fa-wifi"></i> نقطة وصول مزيفة
+
+                            </label>
+
+                        </div>
+
+                        <div class="checkbox-item">
+
+                            <input type="checkbox" name="symptom" value="unknown_devices" id="unknown_devices">
+
+                            <label for="unknown_devices">
+
+                                <i class="fas fa-mobile-alt"></i> أجهزة غير معروفة
+
+                            </label>
+
+                        </div>
+
+                        <!-- أعراض هجمات داخلية -->
+
+                        <div class="checkbox-item">
+
+                            <input type="checkbox" name="symptom" value="insider_activity" id="insider_activity">
+
+                            <label for="insider_activity">
+
+                                <i class="fas fa-user-friends"></i> نشاط داخلي مشبوه
+
+                            </label>
+
+                        </div>
+
+                        <div class="checkbox-item">
+
+                            <input type="checkbox" name="symptom" value="outdated_systems" id="outdated_systems">
+
+                            <label for="outdated_systems">
+
+                                <i class="fas fa-sync-alt"></i> أنظمة قديمة
+
+                            </label>
+
+                        </div>
+
+                        <div class="checkbox-item">
+
+                            <input type="checkbox" name="symptom" value="suspicious_traffic" id="suspicious_traffic">
+
+                            <label for="suspicious_traffic">
+
+                                <i class="fas fa-traffic-light"></i> حركة مرور مشبوهة
+
+                            </label>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <button type="button" class="btn" onclick="diagnose()">
+
+                    <i class="fas fa-diagnoses"></i> تشخيص الهجمات
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <!-- صفحة النتائج -->
+
+    <div id="results-page" class="page">
+
+        <div class="header">
+
+            <h1>نتائج التشخيص</h1>
+
+            <p>هذه هي الهجمات المحتملة بناءً على الأعراض المدخلة.</p>
+
+        </div>
+
+        <div class="results">
+
+            <div class="result-cards" id="resultsContainer">
+
+                <!-- النتائج ستظهر هنا -->
+
+            </div>
+
+            <button class="btn" onclick="showPage('home-page')">
+
+                <i class="fas fa-home"></i> العودة إلى الصفحة الرئيسية
+
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- شريط التنقل -->
+
+    <div class="navbar">
+
+        <button class="navbar-btn active" onclick="showPage('home-page')">
+
+            <i class="fas fa-home"></i>
+
+            <span>الرئيسية</span>
+
+        </button>
+
+        <button class="navbar-btn" onclick="showPage('symptoms-page')">
+
+            <i class="fas fa-stethoscope"></i>
+
+            <span>الأعراض</span>
+
+        </button>
+
+        <button class="navbar-btn" onclick="showPage('results-page')">
+
+            <i class="fas fa-file-medical"></i>
+
+            <span>النتائج</span>
+
+        </button>
+
+    </div>
+
+    <script>
+
+        // قاعدة بيانات الهجمات والأعراض
+
+        const attacksDatabase = [
+
+            {
+
+                id: "ddos_attack",
+
+                name: "هجوم حجب الخدمة (DDoS)",
+
+                symptoms: ["slow_network", "high_latency", "packet_loss", "ddos_traffic", "bandwidth_exhaustion"],
+
+                networks: ["net_admin", "net_students", "net_wifi", "net_security", "net_cloud"],
+
+                description: "هجوم حجب الخدمة الموزع (DDoS) حيث يتم إغراق الشبكة بحركة مرور زائفة مما يؤدي إلى بطء أو تعطل الخدمات.",
+
+                severity: "high",
+
+                recommendation: "استخدمي جدران نارية متقدمة، وقومي بتوزيع حركة المرور على خوادم متعددة."
+
+            },
+
+            {
+
+                id: "brute_force_attack",
+
+                name: "هجوم القوة الغاشمة",
+
+                symptoms: ["repeated_login_failures", "weak_passwords", "brute_force_logs"],
+
+                networks: ["net_admin", "net_security"],
+
+                description: "محاولات متكررة لتخمين كلمات المرور للوصول غير المصرح به إلى الأنظمة.",
+
+                severity: "high",
+
+                recommendation: "قومي بتعزيز كلمات المرور، واستخدمي مصادقة ثنائية، وقومي بحظر الحسابات بعد محاولات فاشلة متعددة."
+
+            },
+
+            {
+
+                id: "phishing_attack",
+
+                name: "هجوم التصيد الاحتيالي",
+
+                symptoms: ["phishing_emails", "credential_leak", "email_spoofing"],
+
+                networks: ["net_students", "net_admin"],
+
+                description: "رسائل بريد إلكتروني احتيالية تهدف إلى خداع المستخدمين للكشف عن معلومات حساسة مثل كلمات المرور.",
+
+                severity: "medium",
+
+                recommendation: "قومي بتثقيف المستخدمين حول رسائل التصيد، واستخدمي فلترة البريد الإلكتروني المتقدمة."
+
+            },
+
+            {
+
+                id: "malware_infection",
+
+                name: "إصابة برمجيات خبيثة",
+
+                symptoms: ["malware_alert", "abnormal_cpu_usage", "abnormal_memory_usage", "antivirus_disabled"],
+
+                networks: ["net_labs", "net_students", "net_admin"],
+
+                description: "برمجيات ضارة تم تثبيتها على الأنظمة وتسبب سلوكًا غير طبيعي مثل استهلاك عالي للموارد.",
+
+                severity: "high",
+
+                recommendation: "قومي بمسح الأنظمة باستخدام برامج مضادة للفيروسات، وعزلي الأجهزة المصابة."
+
+            },
+
+            {
+
+                id: "ransomware_attack",
+
+                name: "هجوم الفدية",
+
+                symptoms: ["ransomware_message", "encrypted_files", "service_shutdown"],
+
+                networks: ["net_staff", "net_admin", "net_cloud"],
+
+                description: "هجوم يقوم بتشفير ملفات النظام وطلب فدية مقابل فك التشفير.",
+
+                severity: "high",
+
+                recommendation: "قومي بإجراء نسخ احتياطي منتظم للبيانات، ولا تدفعي الفدية، واستشيري خبراء الأمن."
+
+            },
+
+            {
+
+                id: "unauthorized_access",
+
+                name: "وصول غير مصرح به",
+
+                symptoms: ["unauthorized_access", "weak_passwords", "insider_activity"],
+
+                networks: ["net_admin", "net_security", "net_cloud"],
+
+                description: "وصول غير مصرح به إلى أنظمة أو بيانات حساسة، قد يكون من قبل موظفين أو مخترقين خارجيين.",
+
+                severity: "high",
+
+                recommendation: "قومي بتقييد الوصول باستخدام أدوار ومصادقات قوية، وراقبي الأنشطة المشبوهة."
+
+            },
+
+            {
+
+                id: "port_scanning",
+
+                name: "فحص المنافذ",
+
+                symptoms: ["port_scanning_detected", "suspicious_ip", "unusual_ports_open"],
+
+                networks: ["net_security", "net_admin"],
+
+                description: "محاولات مسح المنافذ المفتوحة في الشبكة لتحديد نقاط الضعف المحتملة.",
+
+                severity: "medium",
+
+                recommendation: "قومي بإغلاق المنافذ غير المستخدمة، واستخدمي أنظمة كشف التسلل (IDS)."
+
+            },
+
+            {
+
+                id: "man_in_the_middle",
+
+                name: "هجوم الرجل في الوسط",
+
+                symptoms: ["man_in_the_middle", "arp_spoofing"],
+
+                networks: ["net_wifi", "net_security"],
+
+                description: "هجوم يتم فيه اعتراض الاتصالات بين طرفين دون علمهما، مما يسمح بالتنصت أو التلاعب بالبيانات.",
+
+                severity: "high",
+
+                recommendation: "قومي باستخدام تشفير قوي (مثل VPN)، وراقبي حركة المرور المشبوهة."
+
+            },
+
+            {
+
+                id: "sql_injection",
+
+                name: "هجوم حقن SQL",
+
+                symptoms: ["sql_injection_attempt", "unauthorized_access", "web_defacement"],
+
+                networks: ["net_library", "net_admin"],
+
+                description: "هجوم يتم فيه حقن أوامر SQL خبيثة في حقول الإدخال لاستخراج أو تعديل البيانات في قواعد البيانات.",
+
+                severity: "high",
+
+                recommendation: "قومي باستخدام استعلامات معلمة (Prepared Statements)، وقومي بتحديث الأنظمة بانتظام."
+
+            },
+
+            {
+
+                id: "dns_attack",
+
+                name: "تسميم DNS",
+
+                symptoms: ["dns_poisoning", "suspicious_ip"],
+
+                networks: ["net_admin", "net_security"],
+
+                description: "هجوم يتم فيه التلاعب بسجلات نظام أسماء النطاقات (DNS) لتوجيه المستخدمين إلى مواقع خبيثة.",
+
+                severity: "high",
+
+                recommendation: "قومي بتحديث خواديم DNS بانتظام واستخدمي بروتوكولات أمان مثل DNSSEC."
+
+            },
+
+            {
+
+                id: "xss_attack",
+
+                name: "هجوم XSS",
+
+                symptoms: ["xss_attack", "web_defacement"],
+
+                networks: ["net_library", "net_admin"],
+
+                description: "هجوم يتم فيه حقن نصوص خبيثة في صفحات الويب التي يشاهدها المستخدمون.",
+
+                severity: "medium",
+
+                recommendation: "قومي بتنقية المدخلات وتشفير المخرجات، واستخدمي رؤوس HTTP الأمنية."
+
+            },
+
+            {
+
+                id: "website_defacement",
+
+                name: "تشويه الموقع",
+
+                symptoms: ["web_defacement", "suspicious_traffic"],
+
+                networks: ["net_library", "net_admin"],
+
+                description: "تغيير غير مصرح به في مظهر موقع الويب، غالبًا ما يكون لأسباب سياسية أو إجرامية.",
+
+                severity: "medium",
+
+                recommendation: "قومي بتحديث أنظمة إدارة المحتوى بانتظام، واستخدمي جدران نارية لتطبيقات الويب."
+
+            },
+
+            {
+
+                id: "data_breach",
+
+                name: "تسريب البيانات",
+
+                symptoms: ["data_exfiltration", "credential_leak"],
+
+                networks: ["net_admin", "net_cloud", "net_security"],
+
+                description: "وصول غير مصرح به إلى البيانات الحساسة ونقلها خارج المنظمة.",
+
+                severity: "high",
+
+                recommendation: "قومي بتشفير البيانات الحساسة، واستخدمي أنظمة كشف التسلل، وراقبي الوصول إلى البيانات."
+
+            },
+
+            {
+
+                id: "cloud_attack",
+
+                name: "هجوم السحابة",
+
+                symptoms: ["cloud_misconfiguration", "data_exfiltration"],
+
+                networks: ["net_cloud"],
+
+                description: "استغلال ثغرات في إعدادات خدمات السحابة للوصول غير المصرح به أو تسريب البيانات.",
+
+                severity: "high",
+
+                recommendation: "قومي بمراجعة إعدادات الأمان بانتظام، واستخدمي أدوات فحص التكوين."
+
+            },
+
+            {
+
+                id: "log_tampering",
+
+                name: "التلاعب بالسجلات",
+
+                symptoms: ["missing_logs", "modified_logs"],
+
+                networks: ["net_security", "net_admin"],
+
+                description: "تعديل أو حذف سجلات النظام لإخفاء أنشطة غير مصرح بها.",
+
+                severity: "high",
+
+                recommendation: "قومي بحماية سجلات النظام باستخدام حقوق الوصول المناسبة، واستخدمي أنظمة تسجيل مركزية."
+
+            },
+
+            {
+
+                id: "vpn_attack",
+
+                name: "هجوم VPN",
+
+                symptoms: ["vpn_failure", "unauthorized_access"],
+
+                networks: ["net_admin", "net_security"],
+
+                description: "استغلال نقاط ضعف في خدمات VPN للوصول غير المصرح به إلى الشبكة.",
+
+                severity: "high",
+
+                recommendation: "قومي بتحديث برامج VPN بانتظام، واستخدمي بروتوكولات تشفير قوية."
+
+            },
+
+            {
+
+                id: "rogue_ap_attack",
+
+                name: "نقطة وصول مزيفة",
+
+                symptoms: ["rogue_access_point", "unknown_devices"],
+
+                networks: ["net_wifi", "net_security"],
+
+                description: "إعداد نقطة وصول لاسلكية غير مصرح بها للاختراق أو التنصت على الشبكة.",
+
+                severity: "high",
+
+                recommendation: "قومي بمسح الشبكة بانتظام للكشف عن نقاط الوصول غير المصرح بها، واستخدمي تشفير Wi-Fi قوي."
+
+            },
+
+            {
+
+                id: "unauthorized_devices",
+
+                name: "أجهزة غير معروفة",
+
+                symptoms: ["unknown_devices", "suspicious_ip"],
+
+                networks: ["net_wifi", "net_security", "net_admin"],
+
+                description: "وجود أجهزة غير معترف بها أو غير مصرح بها على الشبكة.",
+
+                severity: "medium",
+
+                recommendation: "قومي بتطبيق سياسة BYOD صارمة، واستخدمي أنظمة كشف الأجهزة غير المصرح بها."
+
+            },
+
+            {
+
+                id: "insider_threat",
+
+                name: "تهديد داخلي",
+
+                symptoms: ["insider_activity", "missing_logs"],
+
+                networks: ["net_admin", "net_security"],
+
+                description: "أنشطة ضارة من قبل موظفين أو مستخدمين داخليين لديهم وصول شرعي إلى الأنظمة.",
+
+                severity: "high",
+
+                recommendation: "قومي بمراقبة أنشطة المستخدمين الداخليين، واستخدمي مبدأ أقل امتياز."
+
+            },
+
+            {
+
+                id: "security_misconfiguration",
+
+                name: "إعدادات أمنية ضعيفة",
+
+                symptoms: ["outdated_systems", "weak_passwords"],
+
+                networks: ["net_admin", "net_security", "net_cloud"],
+
+                description: "إعدادات غير آمنة في الأنظمة أو التطبيقات يمكن أن تؤدي إلى ثغرات أمنية.",
+
+                severity: "medium",
+
+                recommendation: "قومي بمراجعة الإعدادات الأمنية بانتظام، واستخدمي أدوات فحص الثغرات."
+
+            },
+
+            {
+
+                id: "suspicious_activity",
+
+                name: "نشاط مشبوه",
+
+                symptoms: ["suspicious_traffic", "suspicious_ip"],
+
+                networks: ["net_security", "net_admin"],
+
+                description: "أنشطة غير عادية على الشبكة قد تشير إلى محاولات اختراق أو تسريب بيانات.",
+
+                severity: "medium",
+
+                recommendation: "قومي بمراقبة حركة المرور على الشبكة، واستخدمي أنظمة كشف التسلل."
+
+            },
+
+            {
+
+                id: "full_network_compromise",
+
+                name: "اختراق شامل للشبكة",
+
+                symptoms: ["data_exfiltration", "ransomware_message", "unauthorized_access"],
+
+                networks: ["net_admin", "net_security", "net_cloud"],
+
+                description: "اختراق شامل لأحد أو أكثر من شبكات الجامعة، مما يسمح للمهاجم بالوصول الكامل إلى الأنظمة والبيانات.",
+
+                severity: "high",
+
+                recommendation: "قومي بعزل الشبكة فورًا، واستشيري خبراء الأمن السيبراني، وقومي بإجراء تحقيق شامل."
+
+            }
+
+        ];
+
+        // دالة لإظهار الصفحة المطلوبة
+
+        function showPage(pageId) {
+
+            // إخفاء جميع الصفحات
+
+            document.querySelectorAll('.page').forEach(page => {
+
+                page.classList.remove('active');
+
+            });
+
+            // إظهار الصفحة المطلوبة
+
+            document.getElementById(pageId).classList.add('active');
+
+            // تحديث زر التنقل النشط
+
+            document.querySelectorAll('.navbar-btn').forEach(btn => {
+
+                btn.classList.remove('active');
+
+                if (btn.getAttribute('onclick').includes(pageId)) {
+
+                    btn.classList.add('active');
+
+                }
+
+            });
+
+            // التمرير إلى الأعلى
+
+            window.scrollTo(0, 0);
+
+        }
+
+        // دالة تشخيص الهجمات
+
+        function diagnose() {
+
+            const networkType = document.getElementById('networkType').value;
+
+            const symptoms = Array.from(document.querySelectorAll('input[name="symptom"]:checked')).map(input => input.value);
+
+            // التحقق من اختيار نوع الشبكة
+
+            if (!networkType) {
+
+                alert('يرجى اختيار نوع الشبكة.');
+
+                return;
+
+            }
+
+            // التحقق من اختيار الأعراض
+
+            if (symptoms.length === 0) {
+
+                alert('يرجى اختيار أعراض واحدة على الأقل.');
+
+                return;
+
+            }
+
+            // إضافة تأثير التحميل
+
+            const resultsContainer = document.getElementById('resultsContainer');
+
+            resultsContainer.innerHTML = `
+
+                <div class="diagnosing">
+
+                    <p style="text-align: center; font-size: 1.2em; color: var(--text-light);">
+
+                        <i class="fas fa-spinner fa-spin"></i> جاري التشخيص...
+
+                    </p>
+
+                </div>
+
+            `;
+
+            // تأخير بسيط لمحاكاة عملية التشخيص
+
+            setTimeout(() => {
+
+                // فلترة الهجمات بناءً على الأعراض والشبكة
+
+                const matchedAttacks = attacksDatabase.filter(attack =>
+
+                    attack.networks.includes(networkType) &&
+
+                    attack.symptoms.some(symptom => symptoms.includes(symptom))
+
+                );
+
+                // إذا لم يتم العثور على هجمات
+
+                if (matchedAttacks.length === 0) {
+
+                    resultsContainer.innerHTML = `
+
+                        <div class="result-card low-risk">
+
+                            <h3>
+
+                                لا يوجد هجمات مطابقة
+
+                                <i class="fas fa-check-circle attack-icon"></i>
+
+                            </h3>
+
+                            <p>لم يتم العثور على هجمات مطابقة للأعراض المدخلة في الشبكة المختارة.</p>
+
+                            <div class="severity">خطورة: منخفضة</div>
+
+                        </div>
+
+                    `;
+
+                } else {
+
+                    // عرض النتائج
+
+                    resultsContainer.innerHTML = '';
+
+                    matchedAttacks.forEach(attack => {
+
+                        const card = document.createElement('div');
+
+                        card.className = `result-card ${attack.severity}-risk`;
+
+                        const severityText = attack.severity === 'high' ? 'عالية' :
+
+                                             attack.severity === 'medium' ? 'متوسطة' : 'منخفضة';
+
+                        const attackIcon = attack.severity === 'high' ? 'fa-exclamation-triangle' :
+
+                                           attack.severity === 'medium' ? 'fa-exclamation-circle' :
+
+                                           'fa-check-circle';
+
+                        card.innerHTML = `
+
+                            <h3>
+
+                                ${attack.name}
+
+                                <i class="fas ${attackIcon} attack-icon"></i>
+
+                            </h3>
+
+                            <p>${attack.description}</p>
+
+                            <div class="severity">خطورة: ${severityText}</div>
+
+                            <p style="margin-top: 15px; font-size: 0.95em; color: var(--dark-color);">
+
+                                <strong>التوصيات:</strong> ${attack.recommendation}
+
+                            </p>
+
+                        `;
+
+                        resultsContainer.appendChild(card);
+
+                    });
+
+                }
+
+                // الانتقال إلى صفحة النتائج
+
+                showPage('results-page');
+
+            }, 1500); // تأخير 1.5 ثانية لمحاكاة عملية التشخيص
+
+        }
+
+        // تفعيل زر التنقل عند التمرير
+
+        window.addEventListener('scroll', () => {
+
+            const scrollPosition = window.scrollY;
+
+            if (scrollPosition > 100) {
+
+                document.querySelector('.navbar').style.transform = 'translateY(0)';
+
+            }
+
+        });
+
+    </script>
+
+</body>
+
+</html>
+
